@@ -15,6 +15,7 @@ import kr.ac.kopo.kopo41.domain.BoardItem;
 class BoardItemDaoTest {
 	private BoardItemDao boardItemDao = new BoardItemDaoImpl();
 	private BoardItem boardItem1;
+	private BoardItem boardItem2;
 	
 	
 	
@@ -58,24 +59,29 @@ class BoardItemDaoTest {
 		assertEquals(boardItem.getTitle(), "titleUpdated");
 		
 	}
+	
 	@Test
 	void update(){
-		BoardItem boardItem = boardItemDao.selectOne(1);
+
 		boardItem1 = new BoardItem();
 		boardItem1.setId(1);
 		boardItem1.setTitle("titleUpdated");
 		boardItem1.setContent("수병몬발사");
-		boardItemDao.update(boardItem1);
-		assertEquals(boardItem.getId(), 1);
-		assertEquals(boardItem.getTitle(), "titleUpdated");
-		assertEquals(boardItem.getContent(), "수병몬발사");
-		
+		boardItem2 = new BoardItem();
+		boardItem2.setId(2);
+		boardItem2.setTitle("titleUpdated2");
+		boardItem2.setContent("재원몬발사");
+		boardItemDao.update(boardItem2);
+		BoardItem boardItem = boardItemDao.selectOne(2);
+		assertEquals(boardItem.getId(), 2);
+		assertEquals(boardItem.getTitle(), "titleUpdated2");
+		assertEquals(boardItem.getContent(), "재원몬발사");
 	}
 	
 	@Test
 	void selectAll() {
 		
-		List<BoardItem> boardItem = boardItemDao.selectAll(0, 50);
+		List<BoardItem> boardItem = boardItemDao.selectAll(1, 50);
 		boardItem.get(0).getId();
 		assertEquals(boardItem.get(0).getId(), 1);
 		assertEquals(boardItem.get(0).getTitle(), "titleUpdated");

@@ -34,7 +34,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 
 	@Override
 	public BoardItem selectOne(int id) {//id입력받아서 해당 아이디 조회
-		BoardItem boardItem = new BoardItem();
+		BoardItem boardItem = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.23.106:33060/kopoctc", "root", "1234");
@@ -43,6 +43,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 			sql = "select * from gongji where id = " + id + ";";
 			ResultSet rset = stmt.executeQuery(sql); // 쿼리문을 실행하고 반환한 값을 저장.
 			rset.next();
+			boardItem = new BoardItem();
 			boardItem.setId(rset.getInt(1));
 			boardItem.setTitle(rset.getString(2));
 			boardItem.setDate(rset.getDate(3));
@@ -54,7 +55,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 	}
 
 	@Override
-	public List<BoardItem> selectAll(int page, int countPerPage) {
+	public List<BoardItem> selectAll(int start, int countPerPage) {
 		String sql ="";
 		List<BoardItem> boardItems = new ArrayList<BoardItem>();
 		try {
@@ -62,7 +63,8 @@ public class BoardItemDaoImpl implements BoardItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.23.106:33060/kopoctc", "root", "1234");
 			Statement stmt = conn.createStatement();
-			sql = "select * from gongji limit " + page + "," + countPerPage + ";";
+
+			sql = "select * from gongji limit " + (countPerPage * (start - 1)) + ", " + countPerPage + ";";
 			ResultSet rset = stmt.executeQuery(sql); // 쿼리문을 실행하고 반환한 값을 저장.
 
 			while (rset.next()) {
